@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Expense Tracker</title>
+    <script defer src="/static/main.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        form, .filters { margin-bottom: 20px; }
+        input, button, select { padding: 8px; margin: 4px; }
+        ul { list-style-type: none; padding: 0; }
+        li { background: #f2f2f2; margin: 5px 0; padding: 8px; border-radius: 4px; }
+        .filters { border: 1px solid #ccc; padding: 10px; border-radius: 6px; display: inline-block; }
+    </style>
+</head>
+<body>
+    <h1>Expense Tracker</h1>
+
+    <!-- Форма добавления расходов -->
+    <form id="expense-form">
+        <input type="text" id="title" placeholder="Название" required>
+        <input type="number" id="amount" placeholder="Сумма" required>
+        <input type="text" id="category" placeholder="Категория">
+        <button type="submit">Добавить расход</button>
+    </form>
+
+    <!-- Фильтры -->
+    <div class="filters">
+        <input type="text" id="filter-category" placeholder="Категория">
+        <input type="date" id="filter-date-from">
+        <input type="date" id="filter-date-to">
+        <button id="apply-filters">Применить фильтры</button>
+    </div>
+
+    <ul id="expenses-list"></ul>
+</body>
+</html>

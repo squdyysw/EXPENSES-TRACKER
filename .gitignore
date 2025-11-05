@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+env/
+venv/
+.venv/
+
+# SQLite database
+*.db
+*.sqlite3
+app/*.db
+
+# Byte-compiled / distribution / packaging
+build/
+dist/
+*.egg-info/
+
+# Virtualenvs
+env/
+venv/
+.venv/
+
+# PyEnv
+.python-version
+
+# IDE
+.vscode/
+.idea/
+
+# macOS
+.DS_Store
+
+# Logs
+*.log
+
+# node (if you use)
+node_modules/
+
+# Temporary
+*.tmp
