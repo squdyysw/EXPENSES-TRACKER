@@ -1,11 +1,18 @@
 import os
-import sqlite3
 from database import get_db_connection
 
-DB_PATH = "exspenses.db"  # если твоя база называется иначе — поменяй здесь
+DB_PATH = "expenses.db"
+
 
 def clear_table():
-    """Удаляет все данные из таблицы expenses"""
+    """
+    Delete all records from the 'expenses' table.
+
+    This function connects to the SQLite database using the shared
+    connection factory, executes a DELETE statement to remove all rows
+    from the 'expenses' table, commits the transaction, and closes
+    the connection.
+    """
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute("DELETE FROM expenses")
@@ -13,15 +20,22 @@ def clear_table():
     conn.close()
     print("✅ Все записи в таблице 'expenses' удалены.")
 
+
 def drop_database():
-    """Полностью удаляет файл базы данных"""
+    """
+    Remove the SQLite database file entirely.
+
+    If the file referenced by DB_PATH exists, it is deleted.
+    Otherwise, a notification is printed that no database file was found.
+    """
     if os.path.exists(DB_PATH):
         os.remove(DB_PATH)
         print(f"🗑️ База данных '{DB_PATH}' удалена.")
     else:
         print("⚠️ Файл базы данных не найден.")
 
-if __name__ == "__main__":
+
+if name == "__main__":
     print("Выберите действие:")
     print("1. Очистить таблицу 'expenses'")
     print("2. Полностью удалить базу данных")
