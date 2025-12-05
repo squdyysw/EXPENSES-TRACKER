@@ -11,6 +11,15 @@ from app.logging_info import logger
 DB_NAME = "expenses.db"
 
 
+def set_db_name(db_name: str):
+    """
+    Override the default database name.
+    Used during testing to switch to an in-memory or temporary database.
+    """
+    global DB_NAME
+    DB_NAME = db_name
+
+
 def get_db_connection():
     """
     Create and return a SQLite database connection.
