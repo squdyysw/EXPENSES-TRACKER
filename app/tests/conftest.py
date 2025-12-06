@@ -4,37 +4,37 @@ import pytest
 from fastapi.testclient import TestClient
 
 from app.main import app
-from app.database import DB_NAME, init_db
+import app.database as db
+
+os.environ["TESTING"] = "1"
 
 
 @pytest.fixture(scope="session", autouse=True)
 def test_database():
     """
-    Create a temporary SQLite file DB for all tests.
-    This avoids issues with :memory: creating separate DB per connection.
+    Creates a temporary SQLite DB file and forces the entire app
+    to use it during all tests.
     """
-    # создаём временный файл
+
     temp_db = tempfile.NamedTemporaryFile(delete=False)
     temp_db.close()
 
-    # подменяем имя БД
-    original_name = DB_NAME
-    os.environ["TEST_DB_NAME"] = temp_db.name
+    original_name = db.DB_NAME
 
-    # меняем глобальное имя в модуле
-    import app.database as db
     db.DB_NAME = temp_db.name
 
-    # инициализируем таблицы
-    init_db()
+    db.init_db()
 
     yield
 
-    # удаляем временную БД после тестов
     os.remove(temp_db.name)
     db.DB_NAME = original_name
 
 
 @pytest.fixture
 def client():
+    """
+    Returns FastAPI TestClient using the injected test DB.
+    """
     return TestClient(app)
+

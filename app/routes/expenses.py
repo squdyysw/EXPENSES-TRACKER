@@ -112,11 +112,17 @@ def delete_expense(expense_id: int):
     """
     try:
         deleted = crud.delete_expense(expense_id)
+
         if not deleted:
-            logger.info(f"Expense ID {expense_id} not found for deletion")
+            logger.info(f"Expense {expense_id} not found")
             raise HTTPException(status_code=404, detail="Expense not found")
-        logger.info(f"Expense ID {expense_id} deleted")
+
+        logger.info(f"Expense {expense_id} deleted")
         return {"ok": True, "message": f"Expense id={expense_id} deleted"}
+
+    except HTTPException:
+        raise
+
     except Exception as e:
         logger.error(f"Exception in delete_expense: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail="Internal server error")

@@ -1,18 +1,14 @@
 """
 Main entry point for the Expense Tracker API.
-
-Initializes the database, configures templates, mounts static files,
-sets up logging, exception handlers, and registers application routes.
 """
 
 import os
 import logging
 from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse, HTMLResponse
+from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.exceptions import RequestValidationError
-from fastapi.responses import JSONResponse
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.status import HTTP_422_UNPROCESSABLE_ENTITY
 
@@ -27,26 +23,25 @@ logging.basicConfig(
 
 logger = logging.getLogger("expense_tracker")
 
-
 app = FastAPI(
     title="Expense Tracker API",
     description="Simple API to manage personal expenses.",
     version="1.0.0",
 )
 
-logger.info("Initializing database...")
-init_db()
-logger.info("Database initialized.")
+if os.environ.get("TESTING") != "1":
+    logger.info("Initializing database...")
+    init_db()
+    logger.info("Database initialized.")
+
 
 templates = Jinja2Templates(directory="app/templates")
-
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 STATIC_DIR = os.path.join(BASE_DIR, "static")
 
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 logger.info(f"Static files mounted at {STATIC_DIR}")
-
 
 app.include_router(expenses.router)
 logger.info("Expenses router loaded.")
@@ -73,18 +68,12 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
 
 @app.get("/", response_class=HTMLResponse)
 def root(request: Request):
-    """
-    Render the main application page.
-    """
     logger.debug("Rendering index page.")
     return templates.TemplateResponse("index.html", {"request": request})
 
 
 @app.get("/favicon.ico")
 async def favicon():
-    """
-    Serve the application favicon.
-    """
     path = "app/static/favicon.ico"
     logger.debug(f"Serving favicon from {path}")
     return FileResponse(path)
